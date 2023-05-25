@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "956801322641",
+    "project_id": "viresh-flash-chat",
+    "storage_bucket": "viresh-flash-chat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956801322641:android:4f0642384a5ec55bedf930",
+        "android_client_info": {
+          "package_name": "com.example.flash_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "956801322641-rr5ad787bh6ng16vta89j62rgejktg7p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDifX3bqO-kREKJRTALM9z3nPCpvNdxnNg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "956801322641-rr5ad787bh6ng16vta89j62rgejktg7p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "956801322641-1e6ngsotg25rtj600qdp7oodqc45sjpi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.flashChat"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
