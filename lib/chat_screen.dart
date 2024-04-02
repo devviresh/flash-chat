@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_string_interpolations
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,19 +17,19 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   final _auth = FirebaseAuth.instance;
   late String messageText;
 
   void getCurrentUser() async {
     try {
-      final user = await _auth.currentUser;
+      final user = _auth.currentUser;
       if (user != null) {
         loggedInUser = user;
-        print(loggedInUser.email);
+        // print(loggedInUser.email);
       }
     } catch (e) {
-      print(e);
+      // print(e);
     }
   }
 
@@ -56,7 +58,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flash Chat'),
+        title: const Text('Flash Chat'),
         actions: [
           IconButton(
               onPressed: () {
@@ -65,7 +67,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 _auth.signOut();
                 Navigator.pop(context);
               },
-              icon: Icon(Icons.logout))
+              icon: const Icon(Icons.logout))
         ],
       ),
       body: Column(
@@ -74,11 +76,11 @@ class _ChatScreenState extends State<ChatScreen> {
               child: StreamBuilder(
             stream: _firestore
                 .collection('messages')
-                .orderBy('timestamp')
+                .orderBy('timestamp', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                final messages = snapshot.data?.docs.reversed;
+                final messages = snapshot.data?.docs;
                 List<MessageBubble> messageBubble = [];
                 for (var message in messages!) {
                   final messageText = message.data()['text'];
@@ -95,13 +97,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 }
                 return ListView(
                   reverse: true,
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   children: messageBubble,
                 );
               }
-              return Container(
-                child: Text('no messages here!'),
-              );
+              return const Text('no messages here!');
             },
           )),
           Container(
@@ -114,9 +114,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   onChanged: (value) {
                     messageText = value;
                   },
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
-                      hintText: 'Write your message'),
+                      hintText: 'Write your message..'),
                 )),
                 TextButton(
                     onPressed: () {
@@ -127,7 +127,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         'timestamp': Timestamp.now()
                       });
                     },
-                    child: Icon(Icons.send))
+                    child: const Icon(Icons.send))
               ],
             ),
           )
@@ -139,7 +139,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
 class MessageBubble extends StatelessWidget {
   const MessageBubble(
-      {required this.sender,
+      {super.key,
+      required this.sender,
       required this.text,
       required this.time,
       required this.isMe});
@@ -158,28 +159,37 @@ class MessageBubble extends StatelessWidget {
         crossAxisAlignment:
             isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          Text('$sender',
-              style: TextStyle(fontSize: 12.0, color: Colors.black54)),
-          SizedBox(height: 3.0),
+          isMe
+              ? const SizedBox()
+              : Text(sender,
+                  style:
+                      const TextStyle(fontSize: 12.0, color: Colors.black54)),
+          const SizedBox(height: 3.0),
           Material(
             elevation: 5.0,
             color: isMe ? Colors.blue : Colors.redAccent,
             borderRadius: BorderRadius.only(
-                topLeft: isMe ? Radius.circular(10.0) : Radius.circular(0.0),
-                topRight: isMe ? Radius.circular(0.0) : Radius.circular(10.0),
-                bottomLeft: Radius.circular(10.0),
-                bottomRight: Radius.circular(10.0)),
+                topLeft: isMe
+                    ? const Radius.circular(10.0)
+                    : const Radius.circular(0.0),
+                topRight: isMe
+                    ? const Radius.circular(0.0)
+                    : const Radius.circular(10.0),
+                bottomLeft: const Radius.circular(10.0),
+                bottomRight: const Radius.circular(10.0)),
             child: Padding(
-              padding: EdgeInsets.fromLTRB(15.0, 10.0, 10.0, 10.0),
+              padding: const EdgeInsets.fromLTRB(15.0, 10.0, 10.0, 10.0),
               child: Wrap(
                 alignment: WrapAlignment.end,
                 crossAxisAlignment: WrapCrossAlignment.end,
                 spacing: 5.0,
                 children: [
-                  Text('$text',
-                      style: TextStyle(fontSize: 16.0, color: Colors.white)),
+                  Text(text,
+                      style:
+                          const TextStyle(fontSize: 16.0, color: Colors.white)),
                   Text('$time',
-                      style: TextStyle(fontSize: 10.0, color: Colors.white54))
+                      style: const TextStyle(
+                          fontSize: 10.0, color: Colors.white54))
                 ],
               ),
             ),
